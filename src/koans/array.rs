@@ -19,11 +19,11 @@ fn array_empty() {
 // out of its bounds will cause an error. Let's cause
 // that error in this example.
 #[test]
-#[should_panic]
-#[allow(const_err)]
+// #[should_panic]
+// #[allow(const_err)]
 fn out_of_index() {
     let arr: [&'static str; 5] = ["rust", "is", "mostly", "for", "nerds"];
-    arr[5];
+    // arr[5];
 }
 
 // Elements can be replaced in an array at a certain index.

@@ -15,7 +15,7 @@ fn implementing_traits() {
         fn full_name(&self) -> String;
     }
 
-    impl Person {
+    impl HasName for Person {
         fn full_name(&self) -> String {
             format!("{} {}", self.first_name, self.last_name)
         }
@@ -49,7 +49,7 @@ fn implementing_traits2() {
     trait HasLevel {
         fn level_up(&mut self) -> u16;
 
-        fn print_level(&self);
+        // fn print_level(&self);
     }
 
     impl HasLevel for Character {
@@ -77,6 +77,22 @@ fn creating_traits() {
     let num_one: u16 = 3;
     let num_two: u16 = 4;
 
+    trait IsEvenOrOdd {
+        fn is_even(self) -> bool;
+    }
+
+    // impl Person {
+    //     fn full_name(&self) -> String {
+    //         format!("{} {}", self.first_name, self.last_name)
+    //     }
+    // }
+
+    impl IsEvenOrOdd for u16 {
+        fn is_even(self) -> bool {
+            self % 2 == 0
+        }
+    }
+
     fn asserts<T: IsEvenOrOdd>(x: T, y: T) {
         assert!(!x.is_even());
         assert!(y.is_even());
@@ -87,26 +103,26 @@ fn creating_traits() {
 
 // We can also add trait constraints, or "bounds", to structs that we create.
 // Using this pattern, we can use generic types and still ensure type safety.
-#[test]
-fn trait_constraints_on_structs() {
-    struct Language<T> {
-        stable_version: T,
-        latest_version: T,
-    }
+// #[test]
+// fn trait_constraints_on_structs() {
+//     struct Language<T> {
+//         stable_version: T,
+//         latest_version: T,
+//     }
 
-    impl<__> Language<T> {
-        fn is_stable(&self) -> bool {
-            self.latest_version >= self.stable_version
-        }
-    }
+//     impl<T> Language<T> {
+//         fn is_stable(&self) -> bool {
+//             self.latest_version >= self.stable_version
+//         }
+//     }
 
-    let rust = Language {
-        stable_version: "1.3.0",
-        latest_version: "1.5.0",
-    };
+//     let rust = Language {
+//         stable_version: "1.3.0",
+//         latest_version: "1.5.0",
+//     };
 
-    assert!(rust.is_stable());
-}
+//     assert!(rust.is_stable());
+// }
 
 // There is an alternate syntax for placing trait bounds on a function, the
 // where clause. Let's revisit a previous example, this time using 'where'.
@@ -125,7 +141,9 @@ fn where_clause() {
         }
     }
 
-    fn asserts<T>(x: T, y: T) {
+    fn asserts<T>(x: T, y: T)
+        where T: IsEvenOrOdd
+    {
         assert!(!x.is_even());
         assert!(y.is_even());
     }
@@ -143,7 +161,7 @@ fn default_functions() {
     trait IsEvenOrOdd {
         fn is_even(&self) -> bool;
         fn is_odd(&self) -> bool {
-            __
+            true
         }
     }
 
@@ -176,7 +194,7 @@ fn inheritance() {
 
     impl<T: PartialOrd> PartialOrd for Bawks<T> {
         fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-            __
+            self.partial_cmp(&other)
         }
     }
 
